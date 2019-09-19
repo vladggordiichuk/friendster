@@ -8,6 +8,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(7777, '0.0.0.0', () => {
+app.listen(process.env.PORT || 7777, () => {
     console.log('staaartint');
 });
