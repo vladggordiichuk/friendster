@@ -1,0 +1,114 @@
+<popup forwarder>
+    <title></title><close></close>
+    <content>
+        <input name="peopleSearchForwarder" placeholder="Username" />
+        <div class="searchList" style="display: none;"></div>
+    </content>
+</popup>
+<popup room-settings>
+    <title>New Room</title><close></close>
+    <content>
+        <div id="roomImg"><input type="file" accept="image/*" /></div>
+        <input name="roomName" placeholder="Room Name" />
+        <input name="peopleSearchRoomMember" placeholder="Username" />
+        <div class="searchList" style="display: none;"></div>
+        <div id="roomMembers"></div>
+        <btn create-room>Create Room</btn>
+    </content>
+</popup>
+<discussion>
+    <title></title><close></close>
+    <window>
+        <content>
+        </content>
+    </window>
+    <input placeholder="Write something" />
+    <send-translate></send-translate>
+    <send></send>
+</discussion>
+<dashboard class="mobile-active-sidebar">
+    <menu>
+        <div id="account">
+            <div id="pic" style="background-image: url(<%= user.photo %>);"></div>
+            <p><%= user.first_name %></p>
+        </div>
+        <div class="btns">
+            <btn action="msgs" class="active"><!-- <alert>99+</alert> --></btn>
+            <!-- <btn action="contacts"><alert>12</alert></btn> -->
+            <!-- <btn action="settings"></btn> -->
+            <btn action="signout"></btn>
+        </div>
+    </menu>
+    <sidebar>
+        <switcher></switcher>
+        <section rooms>
+            <h1>Rooms</h1>
+            <toggle class="active" listId="1"></toggle>
+            <btn class="active" create-room>Create Room</btn>
+            <list class="active" listId="1">
+                <% roomChats.forEach(function(roomChat) { %>
+                    <item chat-id="<%= roomChat.toRoomId %>" type="room">
+                        <delete></delete>
+                        <photo style="background-image: url(<%= decodeURIComponent(roomChat.photo) %>);"></photo>
+                        <data>
+                            <name><%= decodeURIComponent(roomChat.name) %></name>
+                            <msg><%= decodeURIComponent(roomChat.message) %></msg>
+                            <%
+                                var date = new Date(roomChat.timestamp * 1000);
+                                let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            %>
+                            <date><%= date.toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3").toLowerCase().replace(' ', '') + ' ' + date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear() %></date>
+                        </data>
+                    </item>
+                <% }); %>
+            </list>
+        </section>
+        <section people>
+            <h1>On hand talk</h1>
+            <toggle class="active" listId="2"></toggle>
+            <input class="active" type="text" search="people" placeholder="Username" />
+            <div user class="searchList" style="display: none;"></div>
+            <input class="active" type="text" search="message" placeholder="Message" />
+            <div message class="searchList" style="display: none;"></div>
+            <list class="active" listId="2">
+
+            <% userChats.forEach(function(userChat) { %>
+                <item class="<%= (userChat.userData.websocket > 0 ? 'online' : '') %>" type="user" chat-id="<%= userChat.userData.id %>">
+                    <delete></delete>
+                    <% if(userChat.notSeen != 0) { %>
+                    <alert><%= userChat.notSeen %></alert>
+                    <% } %>
+                    <photo style="background-image: url(<%= decodeURIComponent(userChat.userData.photo) %>);"></photo>
+                    <data>
+                        <name><%= decodeURIComponent(userChat.userData.first_name) %> <%= decodeURIComponent(userChat.userData.last_name) %></name>
+                        <msg><%= decodeURIComponent(userChat.message) %></msg>
+                        <%
+                            var date = new Date(userChat.timestamp * 1000);
+                            let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        %>
+                        <date><%= date.toLocaleTimeString().replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3").toLowerCase().replace(' ', '') + ' ' + date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear() %></date>
+                    </data>
+                </item>
+            <% }); %>
+            
+            </list>
+        </section>
+    </sidebar>
+    <chat>
+        <overflow>
+            <banner></banner>
+            <p>Tap on the right to start conversation</p>
+        </overflow>
+        <header>
+            <name></name>
+            <settings></settings>
+        </header>
+        <window>
+            <content>
+            </content>
+        </window>
+        <input placeholder="Write something" />
+        <send-translate></send-translate>
+        <send></send>
+    </chat>
+</dashboard>
