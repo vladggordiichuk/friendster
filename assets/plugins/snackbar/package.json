@@ -4,7 +4,7 @@
   "description": "Notifications insipired by Google Material Design",
   "main": "src/js/snackbar.js",
   "devDependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.3.0",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.2",
